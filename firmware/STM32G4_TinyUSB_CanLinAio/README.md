@@ -43,7 +43,7 @@ where the hooks are implemented on top of an FDCAN driver and a LIN scheduler.
 - **[CANgaroo](https://github.com/Schildkroet/CANgaroo)** supports all three
   interfaces out of the box: CAN via SocketCAN or `CandleApiDriver`, LIN via
   `LindeApiDriver`, and I/O in the GPIO Control window. Its
-  `src/docs/usb_interfaces.md` is the detailed protocol reference.
+  `docs/usb_interfaces.md` is the detailed protocol reference.
 - **SampleApp/** contains a small C++ host program (libusb) that drives all three
   interfaces (see [Sample host application](#sample-host-application)).
 

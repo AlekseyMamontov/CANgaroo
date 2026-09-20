@@ -2,8 +2,21 @@
 # Setup two virtual CAN interfaces with bidirectional gateway
 # Messages sent on vcan0 appear on vcan1 and vice versa
 # Requires: can-utils (cangw), iproute2
+# Usage: ./setup_vcan.sh        (re-runs itself under sudo when not root)
 
 set -e
+
+# modprobe and "ip link add" need root, so rerun the whole script under sudo
+# rather than failing partway through and leaving half the setup in place.
+if [[ $EUID -ne 0 ]]; then
+    if ! command -v sudo > /dev/null 2>&1; then
+        echo "Error: root privileges are required and sudo was not found." >&2
+        echo "       Run this script as root instead." >&2
+        exit 1
+    fi
+    echo "Root privileges required, re-running under sudo..." >&2
+    exec sudo -- "$(readlink -f "$0")" "$@"
+fi
 
 modprobe vcan
 modprobe can-gw

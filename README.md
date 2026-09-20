@@ -35,7 +35,7 @@
 *   **Multiple Export Formats**: Save traces as Vector ASC, Vector MDF4, Linux candump, PCAP, or PCAPng (Wireshark-compatible).
 *   **Modern Workspace**: A clean, dockable userinterface optimized for multi-monitor setups.
 
-<br>![Cangaroo Trace View](src/docs/view.png)<br>
+<br>![Cangaroo Trace View](docs/view.png)<br>
 
 ## Languages
 
@@ -167,7 +167,7 @@ talks to: **gs_usb** (CAN / CAN FD), **lin_usb** (LIN) and **aio_usb** (I/O +
 analog). It contains only the USB transport. Plug your CAN, LIN and GPIO code
 into its weak `gs_engine_*`, `lin_engine_*` and `aio_hw_*` hooks. `SampleApp/`
 inside it is a standalone libusb host program that exercises every request.
-The wire protocol is documented in [`src/docs/usb_interfaces.md`](src/docs/usb_interfaces.md).
+The wire protocol is documented in [`docs/usb_interfaces.md`](docs/usb_interfaces.md).
 
 ## ARXML to DBC Conversion
 

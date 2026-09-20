@@ -5,7 +5,7 @@ vendor-specific interfaces. Each interface has its own bulk endpoint pair and it
 own host driver in CANgaroo.
 
 The device side is available as a reference implementation:
-[`firmware/STM32G4_TinyUSB_CanLinAio/`](../../firmware/STM32G4_TinyUSB_CanLinAio/README.md),
+[`firmware/STM32G4_TinyUSB_CanLinAio/`](../firmware/STM32G4_TinyUSB_CanLinAio/README.md),
 a bare STM32CubeIDE project (STM32G473, TinyUSB 0.21) with all three class
 drivers, weak no-op hooks where the bus code plugs in, and a standalone libusb
 host sample (`SampleApp/`). Firmware paths below are relative to its `Core/`
@@ -86,9 +86,9 @@ channel does not work: only one handle can claim the interface.
 ## gs_usb (CAN)
 
 Compatible with the Linux kernel `gs_usb` driver (`drivers/net/can/usb/gs_usb.c`) and
-the candleLight Windows API. Firmware: [`Src/gs_usb.c`](../../firmware/STM32G4_TinyUSB_CanLinAio/Core/Src/gs_usb.c) /
-[`Inc/gs_usb.h`](../../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/gs_usb.h) (transport, weak `gs_engine_*` hooks for the
-FDCAN code), config in [`Inc/gs_usb_config.h`](../../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/gs_usb_config.h)
+the candleLight Windows API. Firmware: [`Src/gs_usb.c`](../firmware/STM32G4_TinyUSB_CanLinAio/Core/Src/gs_usb.c) /
+[`Inc/gs_usb.h`](../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/gs_usb.h) (transport, weak `gs_engine_*` hooks for the
+FDCAN code), config in [`Inc/gs_usb_config.h`](../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/gs_usb_config.h)
 (`GS_USB_CAN_CHANNEL_COUNT` 2, FDCAN clock 96 MHz). The clock differs between
 boards, so the host must use `fclk_can` from `BT_CONST`, not a constant.
 Request numbers follow the kernel driver; the candle_api source comments
@@ -179,12 +179,13 @@ frame per transfer.
 
 ## lin_usb (LIN)
 
-Firmware: [`Src/lin_usb.c`](../../firmware/STM32G4_TinyUSB_CanLinAio/Core/Src/lin_usb.c) /
-[`Inc/lin_usb.h`](../../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/lin_usb.h) (USB transport, weak `lin_engine_*` hooks
-for the LIN scheduler), config in [`Inc/lin_usb_config.h`](../../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/lin_usb_config.h)
+Firmware: [`Src/lin_usb.c`](../firmware/STM32G4_TinyUSB_CanLinAio/Core/Src/lin_usb.c) /
+[`Inc/lin_usb.h`](../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/lin_usb.h) (USB transport, weak `lin_engine_*` hooks
+for the LIN scheduler), config in [`Inc/lin_usb_config.h`](../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/lin_usb_config.h)
 (`LIN_USB_CHANNEL_COUNT` 2, `LIN_USB_MAX_SCHEDULE_TABLES` 4,
 `LIN_USB_MAX_SCHEDULE_ENTRIES` 16). Host mirror:
-`src/driver/LindeApiDriver/lin_usb_protocol.h` (keep in sync by hand).
+`src/driver/LindeApiDriver/lin_usb_protocol.h`, kept byte-for-byte identical with
+`firmware/STM32G4_TinyUSB_CanLinAio/SampleApp/lin_usb_protocol.h` by hand.
 
 The device **schedules frames itself**: the host uploads schedule tables, starts one,
 and afterwards only updates publisher payloads and receives results.
@@ -272,9 +273,9 @@ reference-counts the shared device.
 
 ## aio_usb (digital I/O + analog)
 
-Firmware: [`Src/aio_usb.c`](../../firmware/STM32G4_TinyUSB_CanLinAio/Core/Src/aio_usb.c) /
-[`Inc/aio_usb.h`](../../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/aio_usb.h), config in
-[`Inc/aio_usb_config.h`](../../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/aio_usb_config.h) (32 I/O lines, 16 analog
+Firmware: [`Src/aio_usb.c`](../firmware/STM32G4_TinyUSB_CanLinAio/Core/Src/aio_usb.c) /
+[`Inc/aio_usb.h`](../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/aio_usb.h), config in
+[`Inc/aio_usb_config.h`](../firmware/STM32G4_TinyUSB_CanLinAio/Core/Inc/aio_usb_config.h) (32 I/O lines, 16 analog
 channels, 16 bit; a board with two lines and a 12-bit ADC sets 2 / 2 / 12). The
 host must use the counts from `DEVICE_CONFIG`. Host mirror:
 `src/driver/AiodeDriver/aio_usb_protocol.h`. There are no channels; `wValue`

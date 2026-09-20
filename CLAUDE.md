@@ -110,7 +110,7 @@ qmake6 CONFIG+=kvaser CONFIG+=peakcan
 - Vendor USB interfaces of the composite 1d50:606f adapter (lin_usb, aio_usb) go through
   `driver/UsbVendorInterface`: libusb on Linux/macOS, WinUSB by `DeviceInterfaceGUID` on Windows.
   Never `libusb_open()` it on Windows: that opens every WinUSB interface and collides with
-  `CandleApiDriver` on gs_usb interface 0 (see `src/docs/usb_interfaces.md`)
+  `CandleApiDriver` on gs_usb interface 0 (see `docs/usb_interfaces.md`)
 - The lin_usb / aio_usb wire-protocol headers exist twice, byte-for-byte identical:
   `src/driver/{LindeApiDriver/lin_usb_protocol.h,AiodeDriver/aio_usb_protocol.h}` and
   `firmware/STM32G4_TinyUSB_CanLinAio/SampleApp/*_protocol.h`. Edit one, copy it over the
@@ -151,9 +151,13 @@ src/
                    all of them included via window/window.pri
   helpers/       — utility code
   mainwindow.*   — application shell, driver registration, menu actions
+docs/            — manual.tex + usb_interfaces.md (USB wire protocols),
+                   can_signal_byteorder.ods, view.png; docs/build/ is generated
 examples/        — Python scripting example scripts
 firmware/        — STM32G4 reference firmware (gs_usb/lin_usb/aio_usb device side) + libusb SampleApp;
                    standalone STM32CubeIDE/CMake projects, not part of the qmake build
+packaging/       — polkit SocketCAN rules consumed by the CI .deb job
+scripts/         — setup_can.sh / setup_vcan.sh helper scripts
 tests/           — Qt Test unit tests (opt-in build)
 ```
 

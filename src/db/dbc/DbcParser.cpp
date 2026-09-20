@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include <iostream>
 #include "core/Log.h"
-#include "core/DBC/CanDb.h"
+#include "db/model/CanDb.h"
 
 #include "DbcTokens.h"
 

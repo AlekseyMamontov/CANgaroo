@@ -29,8 +29,8 @@
 #include "core/Log.h"
 #include "core/TraceFileWriter.h"
 #include "core/TraceRecorder.h"
-#include "core/DBC/CanDbMessage.h"
-#include "core/DBC/CanDbSignal.h"
+#include "db/model/CanDbMessage.h"
+#include "db/model/CanDbSignal.h"
 
 
 BusTrace::BusTrace(Backend &backend, QObject *parent, int flushInterval)

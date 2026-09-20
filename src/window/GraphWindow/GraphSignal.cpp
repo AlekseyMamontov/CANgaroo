@@ -20,10 +20,10 @@
 */
 
 #include "GraphSignal.h"
-#include "core/DBC/CanDbSignal.h"
-#include "core/DBC/CanDbMessage.h"
-#include "core/DBC/LinSignal.h"
-#include "core/DBC/LinFrame.h"
+#include "db/model/CanDbSignal.h"
+#include "db/model/CanDbMessage.h"
+#include "db/model/LinSignal.h"
+#include "db/model/LinFrame.h"
 
 #include <span>
 #include <QtGlobal>

@@ -34,9 +34,9 @@
 #include "driver/CanDriver.h"
 #include "driver/BusInterface.h"
 #include "driver/BusListener.h"
-#include "parser/dbc/DbcParser.h"
-#include "core/DBC/LinDb.h"
-#include "core/DBC/LinFrame.h"
+#include "db/dbc/DbcParser.h"
+#include "db/model/LinDb.h"
+#include "db/model/LinFrame.h"
 
 Backend *Backend::_instance = nullptr;
 

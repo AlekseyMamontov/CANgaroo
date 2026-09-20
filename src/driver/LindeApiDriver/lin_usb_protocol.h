@@ -4,6 +4,12 @@
  * Host-side mirror of the lin_usb wire protocol.
  * No STM32 HAL or TinyUSB headers — only stdint and stdbool.
  * Keep in sync with Core/Inc/lin_usb.h on the firmware side.
+ *
+ * This file exists twice, byte-for-byte identical:
+ *   src/driver/LindeApiDriver/lin_usb_protocol.h                     (cangaroo host)
+ *   firmware/STM32G4_TinyUSB_CanLinAio/SampleApp/lin_usb_protocol.h  (libusb sample)
+ * Edit one, copy it over the other -- a silent divergence here is a
+ * host/device protocol mismatch.
  */
 
 #include <stdint.h>
@@ -42,6 +48,7 @@ typedef enum
 #define LIN_USB_MODE_START        1u
 #define LIN_USB_MODE_PAUSE        2u
 
+/* Bus config flags (lin_usb_bus_config_t.flags) */
 #define LIN_USB_FLAG_MASTER       0x01u  /* act as LIN master (sends break+sync) */
 #define LIN_USB_FLAG_LISTEN_ONLY  0x02u  /* monitor: never transmit, report all  */
 
@@ -81,15 +88,16 @@ typedef enum
 /* -------------------------------------------------------------------------
  * Misc constants
  * ------------------------------------------------------------------------- */
+/* echo_id of a bus event (frame received or transmitted on the bus) */
 #define LIN_USB_ECHO_ID_RX  0xFFFFFFFFu
 
-/* echo_id of a device->host acknowledgement of a bulk-OUT "set frame data":
- * not a bus event, LIN_USB_FRAME_FLAG_ERROR = LIN ID not in the running
- * schedule, payload unchanged. */
+/* echo_id of the device's acknowledgement of a bulk-OUT "set frame data".
+ * Not a bus event: LIN_USB_FRAME_FLAG_ERROR set = packet invalid or LIN ID not
+ * in the running schedule (payload unchanged).  Exactly one per OUT packet. */
 #define LIN_USB_ECHO_ID_SET_DATA_ACK  0u
 
-/* Fallback slots per schedule table, used only when the device reports 0 in
- * DEVICE_CONFIG (firmware older than the schedule_entries field). */
+/* Fallback slots per schedule table, used by the host only when the device
+ * reports 0 in DEVICE_CONFIG (firmware older than the schedule_entries field). */
 #define LIN_USB_MAX_SCHEDULE_ENTRIES  16u
 
 #define LIN_USB_VERSION_1_3   0u
@@ -128,10 +136,10 @@ typedef struct
 {
     uint8_t  schedule_tables;
     uint8_t  supported_baudrates;
-    uint8_t  schedule_entries;   /* slots per schedule table (0 = older firmware) */
+    uint8_t  schedule_entries;    /* slots per schedule table (0 = older firmware) */
     uint8_t  icount;
-    uint32_t sw_version;         /* major << 16 | minor << 8 | patch */
-    uint32_t hw_version;         /* hardware revision, plain number */
+    uint32_t sw_version;          /* major << 16 | minor << 8 | patch */
+    uint32_t hw_version;          /* hardware revision, plain number */
     uint32_t features;
 } lin_usb_device_config_t;
 
@@ -179,12 +187,12 @@ typedef struct
 
 typedef enum
 {
-    LIN_USB_BUS_STATE_OK       = 0,
-    LIN_USB_BUS_STATE_BUS_OFF  = 1,
-    LIN_USB_BUS_STATE_PASSIVE  = 2,  /* deprecated, use _STOPPED */
-    LIN_USB_BUS_STATE_ERROR    = 3,
-    LIN_USB_BUS_STATE_STOPPED  = 4,
-    LIN_USB_BUS_STATE_SLEEPING = 5,
+    LIN_USB_BUS_STATE_OK       = 0,  /* nominal operation                          */
+    LIN_USB_BUS_STATE_BUS_OFF  = 1,  /* fatal errors; bus unusable                 */
+    LIN_USB_BUS_STATE_PASSIVE  = 2,  /* deprecated, devices report _STOPPED        */
+    LIN_USB_BUS_STATE_ERROR    = 3,  /* recoverable errors (no response, checksum) */
+    LIN_USB_BUS_STATE_STOPPED  = 4,  /* channel not started by the host            */
+    LIN_USB_BUS_STATE_SLEEPING = 5,  /* started, but the bus is in sleep state     */
 } lin_usb_bus_state_e;
 
 typedef struct

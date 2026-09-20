@@ -3,7 +3,7 @@
 
 #include "core/Log.h"
 #include "core/MeasurementInterface.h"
-#include "core/DBC/LinDb.h"
+#include "db/model/LinDb.h"
 
 #include <QMutexLocker>
 #include <QDateTime>

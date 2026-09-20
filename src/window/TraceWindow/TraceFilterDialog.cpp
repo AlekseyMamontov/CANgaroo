@@ -29,9 +29,9 @@
 #include <QVBoxLayout>
 
 #include "core/Backend.h"
-#include "core/DBC/CanDb.h"
-#include "core/DBC/LinDb.h"
-#include "core/DBC/LinFrame.h"
+#include "db/model/CanDb.h"
+#include "db/model/LinDb.h"
+#include "db/model/LinFrame.h"
 #include "core/MeasurementNetwork.h"
 #include "core/MeasurementSetup.h"
 

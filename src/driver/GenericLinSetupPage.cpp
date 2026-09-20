@@ -23,7 +23,7 @@
 #include "core/Backend.h"
 
 #include <QPushButton>
-#include "core/DBC/LinDb.h"
+#include "db/model/LinDb.h"
 #include "core/MeasurementInterface.h"
 #include "core/MeasurementNetwork.h"
 #include "driver/BusInterface.h"

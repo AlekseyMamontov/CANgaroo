@@ -35,8 +35,8 @@
 #include <QFont>
 
 #include "core/Backend.h"
-#include "core/DBC/CanDbMessage.h"
-#include "core/DBC/CanDbSignal.h"
+#include "db/model/CanDbMessage.h"
+#include "db/model/CanDbSignal.h"
 #include "core/MeasurementSetup.h"
 #include "core/MeasurementNetwork.h"
 #include "core/MeasurementInterface.h"

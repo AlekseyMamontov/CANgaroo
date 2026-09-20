@@ -60,8 +60,8 @@
 #include "window/LinControlWindow/LinControlWindow.h"
 #include "window/GpioControlWindow/GpioControlWindow.h"
 #include "window/GatewayWindow/GatewayWindow.h"
-#include "window/SettingsDialog.h"
-#include "window/RecordingDialog.h"
+#include "window/SettingsDialog/SettingsDialog.h"
+#include "window/RecordingDialog/RecordingDialog.h"
 #include "helpers/apphelpers.h"
 
 #include "driver/SLCANDriver/SLCANDriver.h"

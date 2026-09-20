@@ -157,7 +157,7 @@ constexpr SignalCase k_cases[] = {
 // clang-format on
 
 // Mirrors the Motorola start-bit conversion in DbcParser::parseSignal
-// (src/parser/dbc/DbcParser.cpp). BusMessage receives the converted value, so
+// (src/db/dbc/DbcParser.cpp). BusMessage receives the converted value, so
 // the tests must apply the same conversion to stay faithful to the real path.
 // Keep in sync if the parser convention ever changes.
 [[nodiscard]] uint16_t toInternalStartBit(uint16_t dbcStartBit, bool isBigEndian) noexcept

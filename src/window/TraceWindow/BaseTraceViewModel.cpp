@@ -31,9 +31,9 @@
 #include "core/Backend.h"
 #include "core/BusTrace.h"
 #include "core/BusMessage.h"
-#include "core/DBC/CanDbMessage.h"
-#include "core/DBC/LinFrame.h"
-#include "core/DBC/LinSignal.h"
+#include "db/model/CanDbMessage.h"
+#include "db/model/LinFrame.h"
+#include "db/model/LinSignal.h"
 #include "core/ThemeManager.h"
 #include <iostream>
 

@@ -27,7 +27,7 @@
 #include <QList>
 #include <qstringlist.h>
 
-#include "core/DBC/CanDb.h"
+#include "db/model/CanDb.h"
 
 #include "DbcTokens.h"
 

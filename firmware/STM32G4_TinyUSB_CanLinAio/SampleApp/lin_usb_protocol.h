@@ -4,6 +4,12 @@
  * Host-side mirror of the lin_usb wire protocol.
  * No STM32 HAL or TinyUSB headers — only stdint and stdbool.
  * Keep in sync with Core/Inc/lin_usb.h on the firmware side.
+ *
+ * This file exists twice, byte-for-byte identical:
+ *   src/driver/LindeApiDriver/lin_usb_protocol.h                     (cangaroo host)
+ *   firmware/STM32G4_TinyUSB_CanLinAio/SampleApp/lin_usb_protocol.h  (libusb sample)
+ * Edit one, copy it over the other -- a silent divergence here is a
+ * host/device protocol mismatch.
  */
 
 #include <stdint.h>
@@ -61,7 +67,7 @@ typedef enum
 #define LIN_USB_FRAME_FLAG_ENHANCED_CS  0x01u
 #define LIN_USB_FRAME_FLAG_SUBSCRIBER   0x02u
 #define LIN_USB_FRAME_FLAG_ERROR        0x04u
-#define LIN_USB_FRAME_FLAG_WAKEUP       0x08u  /* wakeup event (device→host only) */
+#define LIN_USB_FRAME_FLAG_WAKEUP       0x08u  /* wakeup event (device->host only) */
 #define LIN_USB_FRAME_FLAG_TX_UPDATE    LIN_USB_FRAME_FLAG_WAKEUP  /* historic name */
 #define LIN_USB_FRAME_FLAG_SPORADIC     0x10u
 #define LIN_USB_FRAME_FLAG_RESPONDED    0x20u
@@ -89,6 +95,10 @@ typedef enum
  * Not a bus event: LIN_USB_FRAME_FLAG_ERROR set = packet invalid or LIN ID not
  * in the running schedule (payload unchanged).  Exactly one per OUT packet. */
 #define LIN_USB_ECHO_ID_SET_DATA_ACK  0u
+
+/* Fallback slots per schedule table, used by the host only when the device
+ * reports 0 in DEVICE_CONFIG (firmware older than the schedule_entries field). */
+#define LIN_USB_MAX_SCHEDULE_ENTRIES  16u
 
 #define LIN_USB_VERSION_1_3   0u
 #define LIN_USB_VERSION_2_0   1u
@@ -126,10 +136,10 @@ typedef struct
 {
     uint8_t  schedule_tables;
     uint8_t  supported_baudrates;
-    uint8_t  schedule_entries;    /* slots per schedule table */
+    uint8_t  schedule_entries;    /* slots per schedule table (0 = older firmware) */
     uint8_t  icount;
-    uint32_t sw_version;
-    uint32_t hw_version;
+    uint32_t sw_version;          /* major << 16 | minor << 8 | patch */
+    uint32_t hw_version;          /* hardware revision, plain number */
     uint32_t features;
 } lin_usb_device_config_t;
 

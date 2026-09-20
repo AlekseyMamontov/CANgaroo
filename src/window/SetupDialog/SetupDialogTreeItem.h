@@ -31,8 +31,8 @@
 #include "core/MeasurementSetup.h"
 #include "core/MeasurementNetwork.h"
 #include "core/MeasurementInterface.h"
-#include "core/DBC/CanDb.h"
-#include "core/DBC/LinDb.h"
+#include "db/model/CanDb.h"
+#include "db/model/LinDb.h"
 
 class SetupDialogTreeItem
 {

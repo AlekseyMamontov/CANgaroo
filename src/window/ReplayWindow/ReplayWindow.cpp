@@ -44,7 +44,7 @@
 
 #include "core/BusTrace.h"
 #include "core/Backend.h"
-#include "core/DBC/CanDbMessage.h"
+#include "db/model/CanDbMessage.h"
 #include "core/TraceLineFormat.h"
 #include "driver/BusInterface.h"
 

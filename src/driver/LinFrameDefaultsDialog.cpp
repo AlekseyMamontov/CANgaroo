@@ -19,9 +19,9 @@
 
 #include "LinFrameDefaultsDialog.h"
 
-#include "core/DBC/LinDb.h"
-#include "core/DBC/LinFrame.h"
-#include "core/DBC/LinSignal.h"
+#include "db/model/LinDb.h"
+#include "db/model/LinFrame.h"
+#include "db/model/LinSignal.h"
 
 #include <QComboBox>
 #include <QDialogButtonBox>

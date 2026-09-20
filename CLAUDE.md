@@ -111,6 +111,10 @@ qmake6 CONFIG+=kvaser CONFIG+=peakcan
   `driver/UsbVendorInterface`: libusb on Linux/macOS, WinUSB by `DeviceInterfaceGUID` on Windows.
   Never `libusb_open()` it on Windows: that opens every WinUSB interface and collides with
   `CandleApiDriver` on gs_usb interface 0 (see `src/docs/usb_interfaces.md`)
+- The lin_usb / aio_usb wire-protocol headers exist twice, byte-for-byte identical:
+  `src/driver/{LindeApiDriver/lin_usb_protocol.h,AiodeDriver/aio_usb_protocol.h}` and
+  `firmware/STM32G4_TinyUSB_CanLinAio/SampleApp/*_protocol.h`. Edit one, copy it over the
+  other — they have silently diverged before, and a divergence here is a host/device mismatch
 - Qt SerialBus plugins (Vector, TinyCAN): check `QCanBus::instance()->plugins().contains()` before use
 - Drivers with enable/disable toggle (CANBlaster, TinyCAN): follow settings pattern in `mainwindow.cpp`
 
@@ -135,11 +139,16 @@ qmake6 CONFIG+=kvaser CONFIG+=peakcan
 
 ```
 src/
-  core/          — Backend, BusTrace, CanMessage, CanDb, Log, MeasurementSetup
+  core/          — Backend, BusTrace, CanMessage, Log, MeasurementSetup
+  db/            — description databases, wired up by db/db.pri:
+                     model/ (CanDb*/Lin* object graph), dbc/ (DBC parser),
+                     ldf/ (LIN Description File parser, header-only)
   driver/        — BusInterface, BusListener, CanDriver + per-driver subdirectories
-  parser/        — dbc/ (DBC parser), ldf/ (LIN Description File parser, header-only)
   decoders/      — protocol decoders (UDS, J1939)
-  window/        — UI windows (TraceWindow, SetupDialog, TxGeneratorWindow, ReplayWindow, GatewayWindow, LinControlWindow, ...)
+  window/        — UI windows, one self-contained directory + .pri each
+                   (TraceWindow, SetupDialog, TxGeneratorWindow, ReplayWindow,
+                   GatewayWindow, LinControlWindow, SettingsDialog, ...);
+                   all of them included via window/window.pri
   helpers/       — utility code
   mainwindow.*   — application shell, driver registration, menu actions
 examples/        — Python scripting example scripts

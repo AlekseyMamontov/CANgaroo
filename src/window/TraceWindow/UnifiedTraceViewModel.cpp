@@ -1,8 +1,8 @@
 #include "UnifiedTraceViewModel.h"
 #include "core/BusTrace.h"
 #include "core/Backend.h"
-#include "core/DBC/LinFrame.h"
-#include "core/DBC/CanDbMessage.h"
+#include "db/model/LinFrame.h"
+#include "db/model/CanDbMessage.h"
 #include <QColor>
 #include <QSet>
 #include <QDateTime>

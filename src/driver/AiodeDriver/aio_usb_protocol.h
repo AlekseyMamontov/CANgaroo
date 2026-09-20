@@ -4,6 +4,12 @@
  * Host-side mirror of the aio_usb wire protocol.
  * No STM32 HAL or TinyUSB headers — only stdint and stdbool.
  * Keep in sync with Core/Inc/aio_usb.h on the firmware side.
+ *
+ * This file exists twice, byte-for-byte identical:
+ *   src/driver/AiodeDriver/aio_usb_protocol.h                     (cangaroo host)
+ *   firmware/STM32G4_TinyUSB_CanLinAio/SampleApp/aio_usb_protocol.h  (libusb sample)
+ * Edit one, copy it over the other -- a silent divergence here is a
+ * host/device protocol mismatch.
  */
 
 #include <stdint.h>
@@ -22,7 +28,11 @@
 /* -------------------------------------------------------------------------
  * Channel counts — mirror Core/Inc/aio_usb_config.h
  * ------------------------------------------------------------------------- */
+/* Upper bound for the host buffer.  The device sends analog[] sized to its own
+ * AIO_USB_ANALOG_COUNT, so reports can be shorter; aio_usb_caps_t.analog_count
+ * says how many entries are valid. */
 #define AIO_USB_ANALOG_COUNT  16u
+#define AIO_USB_REPORT_HDR_SIZE  12u   /* timestamp_ms + io_states + io_direction */
 
 /* -------------------------------------------------------------------------
  * Vendor request codes (bRequest)

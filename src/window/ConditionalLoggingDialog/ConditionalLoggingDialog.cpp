@@ -8,9 +8,9 @@
 #include "core/MeasurementSetup.h"
 #include "core/MeasurementNetwork.h"
 #include "core/MeasurementInterface.h"
-#include "core/DBC/CanDb.h"
-#include "core/DBC/CanDbMessage.h"
-#include "core/DBC/CanDbSignal.h"
+#include "db/model/CanDb.h"
+#include "db/model/CanDbMessage.h"
+#include "db/model/CanDbSignal.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>

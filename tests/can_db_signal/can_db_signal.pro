@@ -4,5 +4,5 @@ include(../common.pri)
 SOURCES += \
     CanDbSignalTest.cpp \
     $$SRC_DIR/core/BusMessage.cpp \
-    $$SRC_DIR/core/DBC/CanDbSignal.cpp \
-    $$SRC_DIR/core/DBC/CanDbMessage.cpp
+    $$SRC_DIR/db/model/CanDbSignal.cpp \
+    $$SRC_DIR/db/model/CanDbMessage.cpp

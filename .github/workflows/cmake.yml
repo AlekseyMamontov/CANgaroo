@@ -137,7 +137,7 @@ jobs:
 
           cp cangaroo.desktop "${DEB_DIR}/usr/share/applications/"
           cp src/assets/cangaroo.png "${DEB_DIR}/usr/share/icons/hicolor/256x256/apps/"
-          cp debian/10-cangaroo-socketcan.rules "${DEB_DIR}/usr/share/polkit-1/rules.d/"
+          cp packaging/10-cangaroo-socketcan.rules "${DEB_DIR}/usr/share/polkit-1/rules.d/"
 
           # Bundle libcanlib (built from Kvaser linuxcan source above)
           mkdir -p "${DEB_DIR}/usr/lib/x86_64-linux-gnu"

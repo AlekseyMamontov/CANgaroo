@@ -31,7 +31,7 @@
 #include "core/Backend.h"
 #include "core/MeasurementSetup.h"
 #include "core/MeasurementInterface.h"
-#include "core/DBC/LinDb.h"
+#include "db/model/LinDb.h"
 #include "driver/BusInterface.h"
 #include "driver/CanDriver.h"
 

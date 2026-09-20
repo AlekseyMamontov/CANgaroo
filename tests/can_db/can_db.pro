@@ -8,10 +8,10 @@ QT += xml
 SOURCES += \
     CanDbTest.cpp \
     ../support/LogStub.cpp \
-    $$SRC_DIR/parser/dbc/DbcParser.cpp \
-    $$SRC_DIR/parser/dbc/DbcTokens.cpp \
+    $$SRC_DIR/db/dbc/DbcParser.cpp \
+    $$SRC_DIR/db/dbc/DbcTokens.cpp \
     $$SRC_DIR/core/BusMessage.cpp \
-    $$SRC_DIR/core/DBC/CanDb.cpp \
-    $$SRC_DIR/core/DBC/CanDbMessage.cpp \
-    $$SRC_DIR/core/DBC/CanDbNode.cpp \
-    $$SRC_DIR/core/DBC/CanDbSignal.cpp
+    $$SRC_DIR/db/model/CanDb.cpp \
+    $$SRC_DIR/db/model/CanDbMessage.cpp \
+    $$SRC_DIR/db/model/CanDbNode.cpp \
+    $$SRC_DIR/db/model/CanDbSignal.cpp

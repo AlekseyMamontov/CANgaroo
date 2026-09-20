@@ -19,7 +19,7 @@
 
 */
 
-// LIN Description File parser (src/parser/ldf/ldf_parser.h).
+// LIN Description File parser (src/db/ldf/ldf_parser.h).
 //
 // Header-only and free of Qt, but 1100 lines of hand-written recursive descent
 // with unit-suffix handling (ms/us, kbps, k/M multipliers) and a std::variant for
@@ -30,7 +30,7 @@
 
 #include <QtTest>
 
-#include "parser/ldf/ldf_parser.h"
+#include "db/ldf/ldf_parser.h"
 
 namespace
 {

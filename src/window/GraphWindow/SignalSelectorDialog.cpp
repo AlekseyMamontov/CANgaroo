@@ -27,9 +27,9 @@
 #include <QTreeWidgetItemIterator>
 #include "core/MeasurementSetup.h"
 #include "core/MeasurementNetwork.h"
-#include "core/DBC/CanDbMessage.h"
-#include "core/DBC/LinFrame.h"
-#include "core/DBC/LinSignal.h"
+#include "db/model/CanDbMessage.h"
+#include "db/model/LinFrame.h"
+#include "db/model/LinSignal.h"
 
 SignalSelectorDialog::SignalSelectorDialog(QWidget *parent, Backend &backend)
     : QDialog(parent), _backend(backend)

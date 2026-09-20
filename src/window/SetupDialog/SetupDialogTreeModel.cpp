@@ -23,7 +23,7 @@
 #include "SetupDialogTreeModel.h"
 
 #include "driver/BusInterface.h"
-#include "core/DBC/LinDb.h"
+#include "db/model/LinDb.h"
 
 SetupDialogTreeModel::SetupDialogTreeModel(Backend *backend, QObject *parent)
   : QAbstractItemModel(parent),

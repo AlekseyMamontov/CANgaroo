@@ -28,8 +28,8 @@
 
 #include "core/Backend.h"
 #include "core/BusTrace.h"
-#include "core/DBC/CanDbMessage.h"
-#include "core/DBC/LinFrame.h"
+#include "db/model/CanDbMessage.h"
+#include "db/model/LinFrame.h"
 
 AggregatedTraceViewModel::AggregatedTraceViewModel(Backend &backend)
     : BaseTraceViewModel(backend)

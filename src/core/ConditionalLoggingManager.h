@@ -13,7 +13,7 @@
 #include <QSet>
 #include <QTimer>
 #include "core/BusMessage.h"
-#include "core/DBC/CanDbSignal.h"
+#include "db/model/CanDbSignal.h"
 
 class Backend;
 class CanDbMessage;

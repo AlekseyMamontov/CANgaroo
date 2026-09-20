@@ -32,7 +32,7 @@
 #ifdef signals
 #  undef signals
 #endif
-#include "parser/ldf/ldf_parser.h"
+#include "db/ldf/ldf_parser.h"
 
 LinDb::LinDb() = default;
 

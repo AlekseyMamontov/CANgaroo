@@ -31,10 +31,10 @@
 #include <QtTest>
 
 #include "core/BusMessage.h"
-#include "core/DBC/CanDb.h"
-#include "core/DBC/CanDbMessage.h"
-#include "core/DBC/CanDbSignal.h"
-#include "parser/dbc/DbcParser.h"
+#include "db/model/CanDb.h"
+#include "db/model/CanDbMessage.h"
+#include "db/model/CanDbSignal.h"
+#include "db/dbc/DbcParser.h"
 
 namespace
 {

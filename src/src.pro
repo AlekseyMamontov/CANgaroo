@@ -32,16 +32,10 @@ win32:OBJECTS_DIR = ../build/o/win32
 macx:OBJECTS_DIR = ../build/o/mac
 
 
-SOURCES += main.cpp\
-    mainwindow.cpp \
-    window/ConditionalLoggingDialog.cpp \
-    window/SettingsDialog.cpp \
-    window/RecordingDialog.cpp
+SOURCES += main.cpp \
+    mainwindow.cpp
 
-HEADERS  += mainwindow.h \
-    window/ConditionalLoggingDialog.h \
-    window/SettingsDialog.h \
-    window/RecordingDialog.h
+HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
@@ -49,21 +43,9 @@ RESOURCES = cangaroo.qrc
 
 include($$PWD/core/core.pri)
 include($$PWD/driver/driver.pri)
-include($$PWD/parser/dbc/dbc.pri)
-include($$PWD/parser/ldf/ldf.pri)
+include($$PWD/db/db.pri)
 include($$PWD/decoders/decoders.pri)
-include($$PWD/window/TraceWindow/TraceWindow.pri)
-include($$PWD/window/SetupDialog/SetupDialog.pri)
-include($$PWD/window/LogWindow/LogWindow.pri)
-include($$PWD/window/GraphWindow/GraphWindow.pri)
-include($$PWD/window/CanStatusWindow/CanStatusWindow.pri)
-include($$PWD/window/RawTxWindow/RawTxWindow.pri)
-include($$PWD/window/TxGeneratorWindow/TxGeneratorWindow.pri)
-include($$PWD/window/ScriptWindow/ScriptWindow.pri)
-include($$PWD/window/ReplayWindow/ReplayWindow.pri)
-include($$PWD/window/GatewayWindow/GatewayWindow.pri)
-include($$PWD/window/LinControlWindow/LinControlWindow.pri)
-include($$PWD/window/GpioControlWindow/GpioControlWindow.pri)
+include($$PWD/window/window.pri)
 include($$PWD/helpers/helpers.pri)
 
 

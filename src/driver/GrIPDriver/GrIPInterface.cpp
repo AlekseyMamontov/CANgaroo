@@ -28,7 +28,7 @@
 #include "core/Backend.h"
 #include "core/Log.h"
 #include "core/BusMessage.h"
-#include "core/DBC/LinDb.h"
+#include "db/model/LinDb.h"
 #include "core/MeasurementInterface.h"
 
 #include "GrIP/GrIPHandler.h"

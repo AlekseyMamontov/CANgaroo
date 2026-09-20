@@ -24,7 +24,7 @@
 #include "MeasurementInterface.h"
 
 #include "core/Backend.h"
-#include "core/DBC/LinDb.h"
+#include "db/model/LinDb.h"
 
 
 MeasurementNetwork::MeasurementNetwork()

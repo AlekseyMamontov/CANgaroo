@@ -31,8 +31,8 @@
 #include <QElapsedTimer>
 #include "driver/CanDriver.h"
 #include "core/BusMessage.h"
-#include "core/DBC/CanDb.h"
-#include "core/DBC/LinDb.h"
+#include "db/model/CanDb.h"
+#include "db/model/LinDb.h"
 #include "core/MeasurementSetup.h"
 #include "core/Log.h"
 #include "core/ConditionalLoggingManager.h"

@@ -35,8 +35,8 @@ class TxGeneratorWindow;
 }
 
 #include "BitMatrixWidget.h"
-#include "core/DBC/CanDbMessage.h"
-#include "core/DBC/CanDbSignal.h"
+#include "db/model/CanDbMessage.h"
+#include "db/model/CanDbSignal.h"
 
 class QDomDocument;
 class QDomElement;

@@ -34,7 +34,7 @@
 #include "core/BusTrace.h"
 #include "core/ThemeManager.h"
 #include "helpers/apphelpers.h"
-#include "window/ConditionalLoggingDialog.h"
+#include "window/ConditionalLoggingDialog/ConditionalLoggingDialog.h"
 
 #include "AggregatedTraceViewModel.h"
 #include "DataColumnDelegate.h"

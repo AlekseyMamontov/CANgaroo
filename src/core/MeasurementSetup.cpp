@@ -28,8 +28,8 @@
 #include "core/BusTrace.h"
 #include "core/BusMessage.h"
 #include "core/MeasurementNetwork.h"
-#include "core/DBC/LinDb.h"
-#include "core/DBC/LinFrame.h"
+#include "db/model/LinDb.h"
+#include "db/model/LinFrame.h"
 
 MeasurementSetup::MeasurementSetup(QObject *parent)
   : QObject(parent)

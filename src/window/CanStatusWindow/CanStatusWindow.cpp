@@ -225,7 +225,22 @@ void CanStatusWindow::update()
     {
         BusInterface *intf = row.intf;
         intf->updateStatistics();
-        row.node->setText(column_value, intf->getStateText());
+        QString stateText = intf->getStateText();
+        if (intf->getState() == BusInterface::state_ok && intf->busType() == BusType::CAN)
+        {
+            // "ready" alone would suggest a normal bus participant
+            for (MeasurementNetwork *network : backend().getSetup().getNetworks())
+            {
+                for (MeasurementInterface *mi : network->interfaces())
+                {
+                    if (mi->isEnabled() && mi->busInterface() == intf->getId() && mi->isListenOnlyMode())
+                    {
+                        stateText = tr("ready (listen only)");
+                    }
+                }
+            }
+        }
+        row.node->setText(column_value, stateText);
         setStat(row, Stat::RxFrames,  QString::number(intf->getNumRxFrames()));
         setStat(row, Stat::RxErrors,  QString::number(intf->getNumRxErrors()));
         setStat(row, Stat::RxOverrun, QString::number(intf->getNumRxOverruns()));

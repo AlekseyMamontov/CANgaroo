@@ -82,6 +82,7 @@ public:
     QList<CanTiming> getAvailableBitrates() override;
 
     void applyConfig(const MeasurementInterface &mi) override;
+    void flushPendingConfig() override;
     virtual bool readConfig();
     virtual bool readConfigFromLink(struct rtnl_link *link);
 

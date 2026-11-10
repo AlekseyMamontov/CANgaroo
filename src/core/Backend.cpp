@@ -108,6 +108,23 @@ bool Backend::startMeasurement()
     // Before the listeners start, so the recording includes the first frames.
     _traceRecorder->onMeasurementStarting();
 
+    // Configure every interface first, then let each backend finish deferred
+    // work once (SocketCAN runs all ip commands under a single privilege prompt).
+    for (auto *network : _setup.getNetworks()) {
+        for (auto *mi : network->interfaces()) {
+            if (!mi->isEnabled()) { continue; }
+            BusInterface *intf = getInterfaceById(mi->busInterface());
+            if (intf) { intf->applyConfig(*mi); }
+        }
+    }
+    for (auto *network : _setup.getNetworks()) {
+        for (auto *mi : network->interfaces()) {
+            if (!mi->isEnabled()) { continue; }
+            BusInterface *intf = getInterfaceById(mi->busInterface());
+            if (intf) { intf->flushPendingConfig(); }
+        }
+    }
+
     for (auto *network : _setup.getNetworks()) {
         for (auto *mi : network->interfaces()) {
 
@@ -115,8 +132,6 @@ bool Backend::startMeasurement()
 
             BusInterface *intf = getInterfaceById(mi->busInterface());
             if (intf) {
-                intf->applyConfig(*mi);
-
                 log_info(QString(tr("Listening on interface: %1")).arg(intf->getName()));
                 BusListener *listener = new BusListener(0, *this, *intf);
                 listener->startThread();

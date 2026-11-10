@@ -154,6 +154,9 @@ QString SocketCanInterface::buildIpRouteCmd(const MeasurementInterface &mi)
         cmd.append("on");
     }
 
+    cmd.append("listen-only");
+    cmd.append(mi.isListenOnlyMode() ? "on" : "off");
+
     cmd.append("restart-ms");
     if (mi.doAutoRestart())
     {
@@ -165,6 +168,19 @@ QString SocketCanInterface::buildIpRouteCmd(const MeasurementInterface &mi)
     }
 
     return cmd.join(' ');
+}
+
+// Shell scripts of all interfaces that applyConfig() prepared; run together by
+// flushPendingConfig() so the privilege prompt (pkexec) appears once per
+// measurement start instead of once per ip command.
+static QStringList s_pendingConfig;
+static QMutex s_pendingConfigMutex;
+
+static QString shellQuote(const QString &s)
+{
+    QString q = s;
+    q.replace("'", "'\\''");
+    return "'" + q + "'";
 }
 
 void SocketCanInterface::applyConfig(const MeasurementInterface &mi)
@@ -181,49 +197,108 @@ void SocketCanInterface::applyConfig(const MeasurementInterface &mi)
     if (ipExe.isEmpty())
         ipExe = "/sbin/ip";
 
-    bool needElevation = (geteuid() != 0);
-    if (needElevation)
-        log_info("Not running as root — using pkexec for ip link commands");
+    const QString restartMs = mi.doAutoRestart() ? QString::number(mi.autoRestartMs()) : QString("0");
 
-    auto runIp = [&](const QStringList &args) -> bool
+    // Arguments of the "up" command for a given restart-ms and listen-only
+    // setting ("" = leave the option out).
+    auto upArgs = [&](const QString &restart, const QString &listenOnly) -> QStringList
     {
-        QProcess proc;
-        if (needElevation)
-            proc.start("pkexec", QStringList{ipExe} + args);
-        else
-            proc.start(ipExe, args);
+        QStringList args;
+        args << "link" << "set" << getName() << "up" << "type" << "can";
+        args << "bitrate" << QString::number(mi.bitrate());
+        args << "sample-point" << QString::number(static_cast<float>(mi.samplePoint()) / 1000.0f, 'f', 3);
 
-        if (!proc.waitForFinished(10000))
+        if (mi.isCanFD())
         {
-            log_error("timeout waiting for ip command");
-            return false;
+            args << "dbitrate" << QString::number(mi.fdBitrate());
+            args << "dsample-point" << QString::number(static_cast<float>(mi.fdSamplePoint()) / 1000.0f, 'f', 3);
+            args << "fd" << "on";
         }
-        if (proc.exitStatus() != QProcess::NormalExit || proc.exitCode() != 0)
-        {
-            log_error(QString("ip command failed: ") + QString(proc.readAllStandardError()).trimmed());
-            return false;
-        }
-        return true;
+
+        args << "restart-ms" << restart;
+        if (!listenOnly.isEmpty())
+            args << "listen-only" << listenOnly;
+        return args;
     };
 
-    runIp({"link", "set", getName(), "down"});
-
-    QStringList upArgs;
-    upArgs << "link" << "set" << getName() << "up" << "type" << "can";
-    upArgs << "bitrate" << QString::number(mi.bitrate());
-    upArgs << "sample-point" << QString::number(static_cast<float>(mi.samplePoint()) / 1000.0f, 'f', 3);
-
-    if (mi.isCanFD())
+    auto cmd = [&](const QStringList &args)
     {
-        upArgs << "dbitrate" << QString::number(mi.fdBitrate());
-        upArgs << "dsample-point" << QString::number(static_cast<float>(mi.fdSamplePoint()) / 1000.0f, 'f', 3);
-        upArgs << "fd" << "on";
+        QStringList quoted;
+        for (const QString &a : args)
+            quoted << shellQuote(a);
+        return shellQuote(ipExe) + " " + quoted.join(' ');
+    };
+    const QString fail = QString("echo %1 >&2; rc=1")
+                             .arg(shellQuote(QString("%1: ip link configuration failed").arg(getName())));
+
+    // Always state the listen-only mode explicitly: ctrl-mode flags persist in
+    // the kernel, so a previously enabled listen-only would otherwise stay on.
+    // The kernel refuses ctrl-mode changes while the link is up, which is why
+    // this is applied in the same down -> configure -> up sequence.
+    //
+    // Fallbacks, in order, until one succeeds:
+    //  - a non-zero restart-ms is refused by drivers without a restart-from-
+    //    bus-off callback (mainline gs_usb: EOPNOTSUPP), so retry with 0; the
+    //    gs_usb firmware restarts after bus-off on its own anyway
+    //  - "listen-only off" is refused by drivers without that ctrl-mode
+    //  - "listen-only on" never falls back to normal mode: the user asked for a
+    //    bus that is not driven, so the interface stays down rather than ACKing
+    const QString lo = mi.isListenOnlyMode() ? "on" : "off";
+    QStringList attempts;
+    attempts << cmd(upArgs(restartMs, lo));
+    if (restartMs != "0")
+        attempts << cmd(upArgs("0", lo));
+    if (!mi.isListenOnlyMode())
+    {
+        attempts << cmd(upArgs(restartMs, ""));
+        if (restartMs != "0")
+            attempts << cmd(upArgs("0", ""));
     }
 
-    upArgs << "restart-ms" << (mi.doAutoRestart() ? QString::number(mi.autoRestartMs()) : "0");
+    QString script;
+    script += cmd({"link", "set", getName(), "down"}) + "\n";
+    script += attempts.join(" || ") + " || { " + fail + "; }\n";
 
-    log_info(ipExe + " " + upArgs.join(" "));
-    runIp(upArgs);
+    const QStringList fullArgs = upArgs(restartMs, lo);
+    log_info(ipExe + " " + fullArgs.join(" "));
+    QMutexLocker lock(&s_pendingConfigMutex);
+    s_pendingConfig << script;
+}
+
+void SocketCanInterface::flushPendingConfig()
+{
+    QStringList scripts;
+    {
+        QMutexLocker lock(&s_pendingConfigMutex);
+        scripts.swap(s_pendingConfig);
+    }
+    if (scripts.isEmpty())
+        return;
+
+    const QString script = "rc=0\n" + scripts.join("") + "exit $rc\n";
+
+    QProcess proc;
+    if (geteuid() != 0)
+    {
+        log_info("Not running as root — using pkexec for ip link commands");
+        proc.start("pkexec", QStringList{"sh", "-c", script});
+    }
+    else
+    {
+        proc.start("sh", QStringList{"-c", script});
+    }
+
+    // The user may take a while to type the password.
+    if (!proc.waitForFinished(120000))
+    {
+        log_error("timeout waiting for ip configuration");
+        proc.kill();
+        return;
+    }
+    if (proc.exitStatus() != QProcess::NormalExit || proc.exitCode() != 0)
+    {
+        log_error(QString("ip configuration failed: ") + QString(proc.readAllStandardError()).trimmed());
+    }
 }
 
 #include <linux/netlink.h>

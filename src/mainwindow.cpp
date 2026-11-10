@@ -1349,7 +1349,9 @@ bool MainWindow::showSetupDialog()
 
 #if defined(__linux__)
     // Default SocketCAN interfaces to "configured by OS" when not running as root.
-    if (geteuid() != 0)
+    // Only as the initial default: once the setup was confirmed, the user's own
+    // choice for "configured by OS" must stick.
+    if (geteuid() != 0 && !_hasConfirmedSetup)
     {
         for (auto *network : new_setup.getNetworks())
         {

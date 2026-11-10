@@ -118,6 +118,11 @@ public:
     /// Apply measurement settings (bitrate, mode flags, …) before opening.
     virtual void applyConfig(const MeasurementInterface &mi) = 0;
 
+    /// Called once after applyConfig() has run for every enabled interface and
+    /// before any interface is opened. Backends that defer configuration work
+    /// from applyConfig() (e.g. to ask for privileges only once) finish it here.
+    virtual void flushPendingConfig() {}
+
     /// Currently active nominal bitrate in bits/s.
     virtual unsigned getBitrate() = 0;
 
